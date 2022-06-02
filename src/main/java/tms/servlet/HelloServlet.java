@@ -9,7 +9,7 @@ import java.io.IOException;
 
 //localhost:8080/hello?name=Test - запрос в брузере
 //@WebServlet(urlPatterns = "/hello",loadOnStartup = 0) // если 0 и выше, то экземпляр сревлета создается сразу,
-// -1(по умолчанию) - создается, когда приходит 1-ый запрос. Цифры указывают порядок инициализации (сервлет с наименьшим значение вызывается раньше)
+// -1(по умолчанию) - создается, когда приходит 1-ый запрос(старутется отложенным образом). Цифры указывают порядок инициализации (сервлет с наименьшим значение вызывается раньше)
 @WebServlet(urlPatterns = "/hello",loadOnStartup = 0)
 public class HelloServlet extends HttpServlet {
 // GET POST PUT DELETE - можем переопределить
@@ -33,5 +33,5 @@ public class HelloServlet extends HttpServlet {
 // (создает, вызывает методы, удаляет)
 //Жизненный цикл сервлета:
 //1. Init      |
-//2. Service   |-это методы, только Service вызывается многократно 
+//2. Service   |-это методы, только Service вызывается многократно
 //3. Destroy   |
