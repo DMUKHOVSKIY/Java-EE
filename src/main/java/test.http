@@ -1,0 +1,23 @@
+GET http://localhost:8080/calc?num1=11&num2=9&operation=div
+
+###
+
+POST http://localhost:8080/auth
+Content-Type: application/x-www-form-urlencoded
+
+username=test&password=test
+
+###
+
+POST http://localhost:8080/reg
+Content-Type: application/x-www-form-urlencoded
+
+name=Test&username=test&password=test
+
+###
+
+POST http://localhost:8080/logout
+
+###
+
+GET http://localhost:8080/findHistory
