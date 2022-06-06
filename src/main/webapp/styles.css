@@ -1,0 +1,91 @@
+p { /*это селектор для тега p*/
+    color: green; /*всем с тегом "p"*/
+    font-size: 18px;
+}
+
+body {
+    font-size: 8px;
+}
+
+/*
+button { !*это для всех кнопок*!
+    background-color: red;
+    border-color: black;
+    border-width: 5px; !*обязательно, когда есть цвет border надо указать ширину*!
+    border-style: solid;
+    margin-top: 10px; !*отступы*!
+    margin-bottom: 10px;
+    padding: 6px; !*отступы везде внутри*!
+}
+*/
+
+/*
+.my-button { !*так мы можем задать оформелние к определенным элементам на странице*!
+    background-color: #1aff00;
+    border-color: #ffffff;
+    border-width: 5px; !*обязательно, когда есть цвет border надо указать ширину*!
+    border-style: solid;
+    margin-top: 10px; !*отступы*!
+    margin-bottom: 10px;
+    padding: 6px; !*отступы везде внутри*!
+}
+
+#my-button { !*через id(как класс, но может иметь только 1 тег(1 элемент) на всём документе)/применяется для какого-нибудь уникального элемента*!
+    background-color: #ff003b;
+    border-color: #ffffff;
+    border-width: 5px; !*обязательно, когда есть цвет border надо указать ширину*!
+    border-style: solid;
+    margin-top: 10px; !*отступы*!
+    margin-bottom: 10px;
+    padding: 6px; !*отступы везде внутри*!
+}
+*/
+
+.my-img {
+    width: 180px;
+    heith: 180px;
+}
+
+.my-img:hover {
+    border-radius: 880px;
+}
+
+.my-text {
+    color: blue;
+}
+
+.my-text:hover {
+    color: #ff003b;
+    cursor: pointer; /*при наведении указатель менятся на "руку"*/
+}
+
+.my-link {
+    color: black;
+}
+
+.my-link:hover { /*псевдо класс/наша ссылка будет менять цвет, когда мы на нее наводим на более светлый*/
+    color: #dad5d5;
+}
+
+.my-button {
+    background-color: white;
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 6px;
+    color: black; /*текст*/
+    border-radius: 4px;
+}
+
+.my-button:hover {
+    color: blueviolet;
+    border-color: blueviolet;
+    cursor: pointer;
+    background-color: black;
+}
+
+ul{
+    list-style: none;
+}

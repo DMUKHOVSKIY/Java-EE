@@ -1,0 +1,65 @@
+<!DOCTYPE html> <!--HTML показывает структуру документа, а CSS - оформление(стиль)-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Practice5</title> <!--в head - метоинформация//<head> - тег открывающий </head> - тег закрывающий/
+     у каждого тега есть свои атрибуты(<button type ="button">, атрибуты помогают кастомизировать наш тег каким-то образом) -->
+    <link rel="stylesheet" href="styles.css"> <!--а так мы можем подключить CSS 3 способом - лучший способ-->
+   <!-- <style>
+        p {
+            color: blueviolet; /*так мы можем подключить CSS 2 способом, но это тоже так себе*/
+        }
+
+        input {
+            background-color: blue;
+        }
+    </style>-->
+</head>
+<body>
+<button type="submit"> Button</button> <!--кнопка-->
+<button onclick="alert('Hello World!')"> Button</button> <!--а это уже Java Script-->
+<input type="checkbox"> <!--строка ввода-->
+<form action="/reg" method="post">
+    <!--форма позволяет объеденить набор каих-то вводов,
+    чтобы при нажатии на кнопку все данные собрались и
+    отправились по какому-либо пути -->
+    <input type="text" name="name" placeholder="Name">
+    <br> <!--перенос-->
+    <input type="text" name="username" placeholder="Username">
+    <input type="password" name="password" placeholder="Password">
+    <button>Submit</button>
+</form>
+<img class = "my-img" src="https://bipbap.ru/wp-content/uploads/2017/04/priroda_kartinki_foto_03.jpg"
+     alt="" widh="300px">
+<b>Жирный шрифт</b>
+<i>Курсивный шрифт</i>
+<b><i>Курсивный + жирный шрифт</i></b>
+<h1>Заголовки уровней</h1>
+<h2>Hello</h2>
+<h3>Hello</h3>
+<h4>Hello</h4>
+<h5>Hello</h5>
+<h5>Hello</h5>
+<a class = my-link href="google.com">Ссылка</a>
+<p class = my-text>Hello text</p>  <!--обычный текст, модифицированный классом-->
+<p >Hello text</p>  <!--обычный текст-->
+<ul style="list-style: decimal"> <!--unordered list(список элементов)-->
+    <li>Hello 1</li>
+    <li>Hello 2</li>
+    <li>Hello 3</li>
+    <li>Hello 4</li>
+    <li>Hello 5</li>
+</ul>
+
+<button class = my-button>Training button1</button> <!--применили к нашей кнопке класс из CSS-->
+<button id = my-button>Training button2</button> <!--применили к нашей кнопке id из CSS-->
+
+<p style="color:blueviolet;font-size: 68px">
+   <!-- Так мы можем подключить наш CSS 1 способом, но это плохой способ-->
+</p>
+
+<button class = "my-button" >My button</button>
+</body>
+</html>
+
+<!--Есть 3 способа подключить библиотеку стилей-->
