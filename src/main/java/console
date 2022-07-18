@@ -1,0 +1,42 @@
+/*Связывание таблиц:*/
+select * from users join address on users.address_id =  address.id;
+/*select * from users u join address a on u.address_id = a.id*/
+/*у таблицы addresess берётся id и сравнивается со значением колонки
+address.id у юзера. Можно использовать много операторов join. Если
+хотя бы в 1 таблице нет данных, то ничего не показывается*/
+select u.id, u.name, u.username, u.password, u.role, a.id, a.street from users u join address a on u.address_id = a.id;
+/*u, a - псевдонимы*/
+select * from users left join address on address.id = users.address_id;
+/*Левая таблица преимущественнее, она стоит во главе, если в правой таблице нет информации, то колонки правой забиваются null*/
+select * from users right join address on address.id = users.address_id;
+/*Правая таблица преимущественнее, она стоит во главе, если в левой таблице нет информации, то колонки левой забиваются null*/
+select * from users full join address on address.id = users.address_id;
+/*Выводится вся информация в том числе где её нет (null)*/
+select distinct name from users;
+/*Выводит только полностью уникальные строки(стортировка по name)*/
+select distinct name, username from users;
+/*Выводит только полностью уникальные строки (сортировка по name  и username одновременно)*/
+
+/*Агрегатные функции:*/
+select count(*) from address where id = 2;
+/*Выводит кол-во чего-то, если этого нет - выводит 0*/
+select sum("id") from address;
+/*Выводит сумму чего-то по названию колонки*/
+select max("id") from address;
+/*Выводит максимальное что-то по названию колонки*/
+select * from users limit 2;/*First 2*/
+/*Можно достать данные порционно */
+
+/*Подзапросы:*/
+/*select from users where age > 14 -->
+select from users where age > (select min("age") from users);*/
+
+/*Вхождение в список:*/
+/*select from users where name in ("Petua", "Sanua");*/
+/*Набор значений, которые должны совпадать*/
+
+
+
+
+
+
