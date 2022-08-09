@@ -1,16 +1,15 @@
 package by.tms.controller;
 
 import by.tms.entity.User;
+import lombok.Builder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 //по какому пути будет доступен этот контроллер. Как сюда будут приходить запросы:
 @Controller//расширяет аннотацию @Component
+//Контроллер - обычный класс, который помечен аннотацией @Controller/он как минимум компонент в него можно инжектить (@Autowired)
 @RequestMapping("/hello") //корневой путь к этому контроллеру (можно не указывать, но тогда надо в каждом
 //методе указывать все уточняющие пути. Но  тае делать не надо
 public class HelloWorldController {
@@ -28,7 +27,7 @@ public class HelloWorldController {
     }
 
     //ModelAndView проще использовать, чем Model
-    public ModelAndView anotherHelloWorld(ModelAndView modelAndView){//ModelAndView - включает в себя и view и модель
+    public ModelAndView anotherHelloWorld(ModelAndView modelAndView) {//ModelAndView - включает в себя и view и модель
         modelAndView.setViewName("hello");
         modelAndView.addObject("message", "Hello World!");
         return modelAndView;
@@ -50,5 +49,18 @@ public class HelloWorldController {
         return "number";
     }
 
-    //Мы знаем, что фильтры крепятся к диспатчер сервлетам и фильтр отрабатывает еще до того, как на него придет запрос. Мы хотим отлавливать запрос, когда он уже конкретно идёт на определённый контроллер. Для этого у нас есть Spring Interceptor
+    @GetMapping("/newBean")
+    public String helloWorld4(String name, Model model) {
+        if (name.equals("devil")) {
+            throw new RuntimeException("devil");
+        }
+        return "test";
+    }
+
+    @ExceptionHandler(RuntimeException.class) //можно указывать массив классов
+    public String handleException(RuntimeException e){
+//      log.error("Exception: {}", e.getMessage());
+      return "error"; //сразу после поимки ошибки всех будет перенаправлять в этот метод
+    }
+
 }

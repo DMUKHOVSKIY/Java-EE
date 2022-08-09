@@ -35,6 +35,12 @@
       <artifactId>lombok</artifactId>
       <version>1.18.24</version>
     </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId> <!--надо следить за версиями. Так как просто может не работать без указания ошибок-->
+      <artifactId>hibernate-validator</artifactId>
+      <version>6.2.3.Final</version>
+    </dependency>
+
 
     <dependency>
       <groupId>junit</groupId>

@@ -6,6 +6,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+//Мы знаем, что фильтры крепятся к диспатчер сервлетам и фильтр отрабатывает еще до того, как на него придет запрос. Мы хотим отлавливать запрос, когда он уже конкретно идёт на определённый контроллер. Для этого у нас есть Spring Interceptor
 //Так как Interceptor-ы - более узко специализированные компоненты, то регистрировать их на определённом контроллере или методе сложнее
 @Component
 //В Interceptor-е более детальная обработка всех запросов, в отличие от Filter(один метод doFilter)
@@ -16,7 +17,7 @@ public class HelloInterceptor implements HandlerInterceptor {
         return false ; //запрос дальше не идёт, если true - запрос идёт дальше
     }
 
-//    @Override //Этот метод получает (ModelAndView), который возвращает метод anotherHelloWord и мы можем ещё что-то доработать и даже поменять
+//    @Override //Этот метод получает (ModelAndView), который возвращает метод anotherHelloWord и мы можем ещё что-то доработать и даже поменять до того, как model and view start to connect
 //    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
 //        HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
 //    }

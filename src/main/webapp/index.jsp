@@ -10,3 +10,4 @@
 <a href="/user/registration">Registration</a>
 </body>
 </html>
+'

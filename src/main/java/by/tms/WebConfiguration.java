@@ -14,7 +14,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 //Класс регистрации конфигураций
 @Configuration
 @ComponentScan(basePackages = "by.tms")
-@EnableWebMvc //интерсепторы не работают без этого
+@EnableWebMvc //интерсепторы и валидаторы не работают без этого
 public class WebConfiguration extends WebMvcConfigurerAdapter { //зачеркнут потому что устаревший, но всё еще работает нормально
 
     @Autowired //Так как мы пометили наш Interceptor "@Component"
