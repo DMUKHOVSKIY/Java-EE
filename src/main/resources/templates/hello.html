@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--<html lang="en"> - нет подсказок-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org"> <!--так мы можем видеть подсказки-->
+<head>
+    <meta charset="UTF-8">
+    <title>Hello</title>
+</head>
+<!--<body th:if="${can paste even in the body}">-->
+<!--<div th:if="${isVisible}">
+    <p>Is visible</p>
+    <p>Is visible</p>
+    <p>Is visible</p>
+    <p>Is visible</p>
+</div>-->
+<body>
+<p th:text="${'Hello '+ myName}"></p>
+
+<!--логические операторы:-->
+<!--<c:if test="${myName != null}"> так делали в jstl
+    <p th:text="${'Hello '+ myName}"></p>
+</c:if>-->
+<p th:if="${isVisible}">Is visible</p> <!--не нужно создавать дополнительный тег-->
+
+<!--Цикл:-->
+
+<!--<c:for items="${myList}" var="item"> так делали в jstl
+    <p th:text="${item}"></p>
+</c:for>-->
+
+<!--<ul>
+    <c:for items="${myList}" var="item">
+        <li>${item}</li>
+    </c:for>
+</ul>-->
+
+<ul th:if="${!#lists.isEmpty(history)}"> <!--# помогает увидеть встроенные функции-->
+    <li th:each="operation : ${history}" th:text="${operation}"><!--operation - итеративная переменная; history - источник-->
+        <!--<p th:text="${operation}"></p>--> <!--Это то же самое, что и было-->
+    </li>
+</ul>
+
+</body>
+</html>

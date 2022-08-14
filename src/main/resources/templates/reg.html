@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+</head>
+<body>
+
+<form th:action="@{/user/reg}" method="post" th:object="${newUser}">
+    <!-- th:object=${} - как modelAttribute без саймлива-->
+    <input th:field="*{name}" placeholder="Name"><!--* - указывает, что это тип филда из объекта(newUser)-->
+    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+    <br>
+    <input th:field="*{username}" placeholder="Username">
+    <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
+    <br>
+    <input th:field="*{password}" placeholder="Password">
+    <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+    <br>
+    <button>Submit</button>
+</form>
+
+<!--<form action="/user/reg" method="post">
+    <input type="text" name="name" placeholder="Name">
+    <input type="text" name="username" placeholder="Username">
+    <input type="text" name="password" placeholder="Password">
+    <button>Submit</button>
+</form>-->
+</body>
+</html>
+
+<!-- В Thymeleaf
+$ - это какие-то данные из модели
+# - это какие-то утилиты
+@ - это какие-то пути
+-->
