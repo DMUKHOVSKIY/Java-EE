@@ -2,10 +2,12 @@ package by.tms.service;
 
 import by.tms.dao.HibernateUserDao;
 import by.tms.entity.User;
+import org.hibernate.cache.spi.entry.StructuredCacheEntry;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +19,14 @@ import java.util.List;
 //различные методы разных Dao
 public class UserService {
 
+    //Если у нас есть 2 реализации Dao с аннотацией @Repository, а тут указан интерфейс, то не понятно, какую
+    //реализацию использовать. Есть 2 варианта:
+    //1)Оставить 1 аннотацию @Repository
+    //2)Аннотация @Qualifire:
     @Autowired
+    @Qualifier("hibernateUserDao")
     private HibernateUserDao userDao;
+
     public void save(User user) {
         //Представим ситуацию. У нас есть userDao и orderDao. Мы хотим,
         //чтобы эти 2 операции выполнились в 1 транзакции. Если хотя бы
@@ -30,9 +38,10 @@ public class UserService {
         //orderDao.save(user);
     }//тут выполнился commit и юзер сохранился в БД
 
+    @Transactional(readOnly =true)
     public void trigger() {
         System.out.println(userDao.findAll());
         System.out.println(userDao.findByUsername("a"));
-        System.out.println(userDao.findById(1));
+        System.out.println(userDao.findById(1).getRoles());// не работает без аннотации @Transaction
     }
 }

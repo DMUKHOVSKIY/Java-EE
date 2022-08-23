@@ -1,6 +1,8 @@
 package by.tms.controller;
 
+import by.tms.entity.Address;
 import by.tms.entity.User;
+import by.tms.model.RegistrationModel;
 import by.tms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -25,12 +29,12 @@ public class UserController {
 
     @GetMapping("/registration")
     public String registration(Model model) {
-        model.addAttribute("newUser", new User());//для того, чтобы форма jsp работала мы должны создать нового юзера
+        model.addAttribute("newUser", new RegistrationModel());//для того, чтобы форма jsp работала мы должны создать нового юзера
         return "reg";
     }
 
     @PostMapping("/registration")//так же тут можно потребовать HttpServletRequest
-    public String registration(@Valid @ModelAttribute("newUser") /*сообщаем, что будем валидировать нашего юзера*/User user, BindingResult bindingResult, Model model) {//спринг автоматически может сконструировать целый объект из набора каких-то параметров
+    public String registration(@Valid @ModelAttribute("newUser") /*сообщаем, что будем валидировать нашего юзера*/RegistrationModel user, BindingResult bindingResult, Model model) {//спринг автоматически может сконструировать целый объект из набора каких-то параметров
         if (bindingResult.hasErrors()) {//помогает нам понять есть ли ошибки и если есть, то какие. Мешок, куда сбрасывается весь результат валидаций
             //@ ModelAttribute (то же самое, что и model.addAttribute("newUser", user)) - Если мы ввели данные и они все не подходят, нас перенаправляют в этот метод, а аттрибут остается старый (из метода get)
 //            //получаем все ошибки, которые вообще есть ВРУЧНУЮ
@@ -41,14 +45,26 @@ public class UserController {
 //            model.addAllAttributes(map);//сразу всю мапу
             return "reg";//возвращаем ту же самую страницу с уже ошибками
         }
-        userService.save(user);
+        List<Address> addresses = new ArrayList<>(2);
+        List<String> roles = new ArrayList<>(2);
+        User u = new User();
+        u.setName(user.getName());
+        u.setUsername(user.getUsername());
+        u.setPassword(user.getPassword());
+        addresses.add(new Address(0, user.getCity(), user.getStreet()));
+        addresses.add(new Address(0, user.getCity2(), user.getStreet2()));
+        roles.add(user.getRole1());
+        roles.add(user.getRole2());
+        u.setRoles(roles);
+        u.setAddress(addresses);
+        userService.save(u);
         return "redirect:/"; //перенаправляем простым стрингом(redirect:) на главную страницу(/)
     }
 
     @GetMapping("/trigger")
-    public String trigger(){
+    public String trigger() {
         userService.trigger();
-        return"redirect:/";
+        return "redirect:/";
     }
 
 }

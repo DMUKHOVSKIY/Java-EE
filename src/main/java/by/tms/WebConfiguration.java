@@ -60,9 +60,9 @@ public class WebConfiguration extends WebMvcConfigurerAdapter { //зачеркн
         return sessionFactory;
     }
 
-    @Bean //Это интерфейс из JDK.(по факту чисто jdbc) Его имплементируют Connection pull-ы
+    @Bean //Это интерфейс из JDK.(по факту чисто jdbc) Его имплементируют Connection pull-ы. Это бин не касается гибернейтп
     public DataSource dataSource() {
-        BasicDataSource dataSource = new BasicDataSource();
+        BasicDataSource dataSource = new BasicDataSource(); //не классическая реализация DataSource(), а BasicDataSource() - из пулла коннекшена
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
         dataSource.setUsername("postgres");
@@ -81,13 +81,13 @@ public class WebConfiguration extends WebMvcConfigurerAdapter { //зачеркн
     private final Properties hibernateProperties() { //Дополнительные настройки для гибернейта
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty(
-                "hibernate.hbm2ddl.auto", "create-drop"); //авто ддл. ДДЛ - это когда мы создаем наши структуры (таблицы).
+                "hibernate.hbm2ddl.auto", "create-drop"); //авто ддл. ДДЛ(Data Definition Language - Язык определения данных) - это когда мы создаем наши структуры (таблицы).
         // Когда гибернейт просканирует все сущности помеченные аннотацией entity и если у нас включен авто ддл,
         // то гибернейт САМ СОЗДАСТ таблицы на основании этих классов
         //Используется стратегия create-drop (когда запускаем программу - все старое дропается и создается новое)
         hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");//диалект, чтобы
         // гибернейт понял с какой БД он работает
-        hibernateProperties.setProperty("show_query", "true"); //чтобы в логах показывали все, что надо
+        hibernateProperties.setProperty("show_sql ", "true"); //чтобы в логах показывали все, что надо
         return hibernateProperties;
     }
 }

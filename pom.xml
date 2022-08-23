@@ -58,8 +58,8 @@
     </dependency>
     <dependency>
       <groupId>org.apache.tomcat</groupId> <!--database connection pull. Connection pull - объект, который внутри себя
-       имеет какой-то набор уже созданных и присоединённых конекшенов к БД. И когда пользователь приходит, мы не создаем
-       новый коннекшн (через DriverManager), а берем его из пула и отдаем пользователю -> пользователь его использует и
+       имеет какой-то набор уже созданных и присоединённых конекшенов, присоединенных к БД. И когда пользователь приходит, мы не создаем
+       новый коннекшн (через DriverManager), так как это очень трудозатратно, а берем его из пула и отдаем пользователю -> пользователь его использует и
        вызывает метод close() -> коннекшн возращается в pull, но не уничтожается и когда придет следующий пользователь,
        то он возьмет этот же коннекшн-->
       <artifactId>tomcat-dbcp</artifactId>
@@ -107,5 +107,15 @@
         </plugin>
       </plugins>
     </pluginManagement>
+      <plugins>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <configuration>
+                  <source>8</source>
+                  <target>8</target>
+              </configuration>
+          </plugin>
+      </plugins>
   </build>
 </project>

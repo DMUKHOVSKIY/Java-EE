@@ -21,6 +21,30 @@
     <br>
     <s:errors path="password"/>
     <br>
+    <s:input path="city" placeholder="City"/>
+    <br>
+    <s:errors path="city"/>
+    <br>
+    <s:input path="street" placeholder="Street"/>
+    <br>
+    <s:errors path="street"/>
+    <br>
+    <s:input path="city2" placeholder="City"/>
+    <br>
+    <s:errors path="city2"/>
+    <br>
+    <s:input path="street2" placeholder="Street2"/>
+    <br>
+    <s:errors path="street2"/>
+    <br>
+    <s:input path="role1" placeholder="Role1"/>
+    <br>
+    <s:errors path="role1"/>
+    <br>
+    <s:input path="role2" placeholder="Role2"/>
+    <br>
+    <s:errors path="role2"/>
+    <br>
     <s:button>Submit</s:button>
 </s:form>
 <%--&lt;%&ndash;<form action="/user/registration" method="post">--%>
