@@ -10,10 +10,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
-
-@Repository //аннотация такая же как и @Component. Нужна, чтобы вешать на классы Dao
-public class HibernateUserDao {
-    @Autowired//инжектим сюда ту самую фабрику, которую создавали в конфигурации (sessionFactory)
+//Дао чисто гибернейтовский
+//@Repository //аннотация такая же как и @Component. Нужна, чтобы вешать на классы Dao
+public class HibernateUserDao implements UserDao {
+//    @Autowired//инжектим сюда ту самую фабрику, которую создавали в конфигурации (sessionFactory)
     private SessionFactory sessionFactory;//В гибернейт есть 2 простых понятия - это фабрика сессий и сама сессия
 
     //Сессия - это основной объект в гибернейт, с которым мы работаем в контексте работы с реляционной БД

@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.*;
+import javax.persistence.*; //все аннотации должны идти отсюда. Так как гибернейтовские аннотации - устаревшие
 import javax.validation.constraints.*;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -17,9 +17,23 @@ import java.util.List;
 @Table(name = "users")//так как гибернейт дает название таблице такое же как и название сущности,только
 // с маленькой буквы, а название таблицы user -  зарезервировано, то нам надо дополнительно указать название.
 @Data
+//Именованный запрос:
+@NamedQuery(name = "User.findAll", query = "select u from User u") //надо указать название сущности User., так как может быть 2 findAll в 2 сущностях и неизвестно какой вызвать
+//Если больше 1 запроса:
+//@NamedQueries({
+//        @NamedQuery(name = "User.findAll", query = "select u from User u"),
+//        @NamedQuery(name = "User.findByUsername", query = "select u from User u where u.username = :username")
+//
+//})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//Стратегии для генерации id (Hibernate):
+//1)Identity - самая оптимальная для нас. Она связывается с БД и БД сама генерирует id для нас
+//2)Auto - если у каждой сущности будет стоять эта стратегия, то все id при сборе вместе (в кэше) будут иметь разные значения
+//3)Sequence - сами говорим, какую последовательность хочем генерировать (Например: 1, 5, 10, 15, 20 - через 5)
+//4)Table - отдельная таблица, где хранятся наши id. Он там сам инкрементируется и берётся оттуда
+//DTO - data transfer object - это наша модель (как была Registration /надо было Registration DTO)
     //Эта стратегия говорит, что она будет заниматься инкрементом нашего id
     private long id; //обязательное поле
     @NotNull

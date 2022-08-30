@@ -1,6 +1,7 @@
 package by.tms.service;
 
 import by.tms.dao.HibernateUserDao;
+import by.tms.dao.UserDao;
 import by.tms.entity.User;
 import org.hibernate.cache.spi.entry.StructuredCacheEntry;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,9 @@ public class UserService {
     //1)Оставить 1 аннотацию @Repository
     //2)Аннотация @Qualifire:
     @Autowired
-    @Qualifier("hibernateUserDao")
-    private HibernateUserDao userDao;
+//    @Qualifier("hibernateUserDao")
+    @Qualifier("jpaUserDao")
+    private UserDao userDao;
 
     public void save(User user) {
         //Представим ситуацию. У нас есть userDao и orderDao. Мы хотим,
@@ -40,8 +42,10 @@ public class UserService {
 
     @Transactional(readOnly =true)
     public void trigger() {
-        System.out.println(userDao.findAll());
-        System.out.println(userDao.findByUsername("a"));
-        System.out.println(userDao.findById(1).getRoles());// не работает без аннотации @Transaction
+       User byId = userDao.findById(1);
+        User test = userDao.findByUsername("test");
+        System.out.println(test);
+        System.out.println(byId.getRoles());
+        System.out.println(byId.getAddress());
     }
 }
