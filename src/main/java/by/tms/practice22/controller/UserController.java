@@ -3,9 +3,19 @@ package by.tms.practice22.controller;
 import by.tms.practice22.dao.InMemoryUserDao;
 import by.tms.practice22.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -14,16 +24,29 @@ public class UserController {
     @Autowired
     private InMemoryUserDao inMemoryUserDao;
 
-    @PostMapping
-    public User save(/*@Valid - тоже можно*/ @RequestBody User user) { //так мы можем сказать, чтобы Jackson принял JSON и из него сделал user-а. Эта аннотация (@RequestBody) говорит, что в теле запроса пришел JSON и из него надо создать user-а
+    @PostMapping//? говорит, что может возвращаться любой тип
+    public ResponseEntity<?> save(@Valid @RequestBody User user, BindingResult bindingResult) { //так мы можем сказать, чтобы Jackson принял JSON и из него сделал user-а. Эта аннотация (@RequestBody) говорит, что в теле запроса пришел JSON и из него надо создать user-а
+//        if (bindingResult.hasErrors()) {
+//            Map<String, String> messages = new HashMap<>();
+//            for (FieldError fieldError : bindingResult.getFieldErrors()) {
+//                messages.put(fieldError.getField(), fieldError.getDefaultMessage());
+//            }
+//            return new ResponseEntity<>(messages, HttpStatus.BAD_REQUEST);
+//        }
         User save = inMemoryUserDao.save(user);
-        return save;
+        return new ResponseEntity<>(save, HttpStatus.CREATED); //не совсем правильно возвращать user-а. Вдруг мы захотим еще запихнуть сюда что-то в header поэтому надо использовать обертку ResponseEntity (в нее можно завернуть что угодно)
+//        HttpStatus.CREATED - это уже не 200, а 201; body - сущность, которая будет преобразована в JSON
     }
 
     @GetMapping
-    public List<User> findAll() {
+    public ResponseEntity<List<User>> findAll() {
         List<User> all = inMemoryUserDao.findAll();
-        return all; //Этот лист отдается не сразу, он будет обработан Jackson-ом и вернется JSON
+        if (all.isEmpty()) {
+            return ResponseEntity.noContent().build(); //204 - все хорошо, только нет user-ов в БД
+        }
+        return ResponseEntity.ok(all);
+
+//        return all; //Этот лист отдается не сразу, он будет обработан Jackson-ом и вернется JSON
         //Мы работаем с томкэтом, так как он работает с HTTP, мы можем отправлять json либо html - все равно и то и то текст, только разные форматы
         //Больше нет понятия MVC
         //Теперь у нашей программы на java стало намного больше клиентов
@@ -33,12 +56,18 @@ public class UserController {
     }
 
     @GetMapping("/id")
-    public User findById(long id) {
+    public ResponseEntity<User> findById(long id, HttpServletResponse response) throws IOException {
         Optional<User> byId = inMemoryUserDao.findById(id);
-        if (byId.isPresent()) {
-            return byId.get();
+        if(id==555){
+            throw new RuntimeException("Bad ID"); //будет выводить вместо стэк трэйса с ненужной иноформацией "Bad ID", благодаря нашему классу ExController
         }
-        return null;
+        if (byId.isPresent()) {
+            return ResponseEntity.ok(byId.get());
+        }
+//        response.sendRedirect("/user/username?username=test2"); //пример 3ХХ кода
+        return ResponseEntity.badRequest().build();
+//        return ResponseEntity.notFound().build(); //с таким id - не было найдено. Ошибка 404
+//        return ResponseEntity.notContent().build();
     }
 
     @GetMapping("/username")
@@ -53,15 +82,18 @@ public class UserController {
     @PutMapping
     public User update(@RequestBody User user) {
         Optional<User> update = inMemoryUserDao.update(user);
-        if(update.isPresent()){
+        if (update.isPresent()) {
             return update.get();
         }
         return null;
     }
 
     @DeleteMapping
-    public void delete(@RequestBody User user){
-        inMemoryUserDao.delete(user);
+    public ResponseEntity<?> delete(@RequestBody User user) { //Возвращать мы будем только код. Никаких данных в body у нас не будет. Мы не знаем что там будет <?>
+        if (inMemoryUserDao.delete(user)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
 
 

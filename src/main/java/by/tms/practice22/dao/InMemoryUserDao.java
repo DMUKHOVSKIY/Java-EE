@@ -55,8 +55,8 @@ public class InMemoryUserDao {
         return Optional.empty();
     }
 
-    public void delete(User user){
-        users.remove(user);
+    public boolean delete(User user){
+        return users.remove(user);
     }
 
     public Optional<User> deleteById(long id) {
