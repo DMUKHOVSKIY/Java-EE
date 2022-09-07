@@ -2,6 +2,9 @@ package by.tms.practice22.controller;
 
 import by.tms.practice22.dao.InMemoryUserDao;
 import by.tms.practice22.entity.User;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,19 +23,16 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
+//@Api(tags = {"Users"}) //так можем настроить вид контроллера в документации (сделать красивее). По умолчанию
+//контроллер называется как и класс, а так будет называться "Users"
 public class UserController {
     @Autowired
     private InMemoryUserDao inMemoryUserDao;
 
     @PostMapping//? говорит, что может возвращаться любой тип
-    public ResponseEntity<?> save(@Valid @RequestBody User user, BindingResult bindingResult) { //так мы можем сказать, чтобы Jackson принял JSON и из него сделал user-а. Эта аннотация (@RequestBody) говорит, что в теле запроса пришел JSON и из него надо создать user-а
-//        if (bindingResult.hasErrors()) {
-//            Map<String, String> messages = new HashMap<>();
-//            for (FieldError fieldError : bindingResult.getFieldErrors()) {
-//                messages.put(fieldError.getField(), fieldError.getDefaultMessage());
-//            }
-//            return new ResponseEntity<>(messages, HttpStatus.BAD_REQUEST);
-//        }
+//    @ApiOperation(value = "Save User")//меняем название метода
+//    @ApiResponse() TODO
+    public ResponseEntity<User> save(@Valid @RequestBody User user, BindingResult bindingResult) { //так мы можем сказать, чтобы Jackson принял JSON и из него сделал user-а. Эта аннотация (@RequestBody) говорит, что в теле запроса пришел JSON и из него надо создать user-а
         User save = inMemoryUserDao.save(user);
         return new ResponseEntity<>(save, HttpStatus.CREATED); //не совсем правильно возвращать user-а. Вдруг мы захотим еще запихнуть сюда что-то в header поэтому надо использовать обертку ResponseEntity (в нее можно завернуть что угодно)
 //        HttpStatus.CREATED - это уже не 200, а 201; body - сущность, которая будет преобразована в JSON
