@@ -59,6 +59,17 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId> <!--По факту ORM от спринга для нас-->
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <!--<version>2.7.3</version> так как это родной стартер спринг бута - версию можно удалить-->
+        </dependency>
+<!--так как это ORM - то нам надо скачать определенный драйвер для БД, но так как мы работаем с Spring Data JPA -
+ мы можем использовать inMemory BD, так как она круто работает из коробки -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId><!--драйвер для h2-->
+        </dependency>
     </dependencies>
 
     <build>
