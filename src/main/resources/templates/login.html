@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<form th:action="@{/user/login}" method="post"> <!--th:action - это надо использовать (без него - ошибка), чтобы под капотом thymeleaf дополнительно защитил форму (у него под хорошо работает Security) и тд-->
+    <input type="text" placeholder="Username" name="username"> <!--Мы не создавали собственный метод контроллера для -->
+    <input type="password" placeholder="Password" name="password"> <!--логина, но в документации прописаны нужные "name"-->-->
+    <button>Log in</button>
+</form>
+</body>
+</html>
