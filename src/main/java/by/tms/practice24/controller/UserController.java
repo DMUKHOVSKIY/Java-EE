@@ -1,80 +1,59 @@
 package by.tms.practice24.controller;
 
-import by.tms.practice24.configuration.TokenProvider;
-import by.tms.practice24.dao.UserRepository;
-import by.tms.practice24.entity.User;
-//import io.swagger.annotations.Api;
-//import io.swagger.annotations.ApiOperation;
-//import io.swagger.annotations.ApiResponse;
+
+import by.tms.practice24.dto.UserDataDTO;
+import by.tms.practice24.dto.UserResponseDTO;
+import by.tms.practice24.entity.AppUser;
 import by.tms.practice24.service.UserService;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/user")
-@Tag(name = "User", description = "User Description")
+@AllArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository; //вообще нужно загнать все в UserService
+    private final UserService userService;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private TokenProvider tokenProvider;
-
-
-    @PostMapping("/reg")
-    public ResponseEntity<User> reg(@RequestBody @Valid User user) { //save() работает как регистрация в REST. Нет отдельного метода регистрация
-        User save = userRepository.save(user);
-        return new ResponseEntity<>(save, HttpStatus.CREATED);
+    @PostMapping("/signin")
+    public String login(@RequestParam String username, @RequestParam String password) {
+        return userService.signin(username, password);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<String> login(String username, String password) { //возвращаем типо токен
-        Optional<User> byUsername = userRepository.findByUsername(username);
-        if (byUsername.isPresent()) {
-            User user = byUsername.get();
-            if (user.getPassword().equals(password)) {
-                String s = tokenProvider.generateToken(user.getUsername());//генерируем токен на username and password
-                return ResponseEntity.ok(s);
-            }
-        }
-        return ResponseEntity.badRequest().build();
+    @PostMapping("/signup")
+    public String signup(@RequestBody UserDataDTO user) { //Мы используем UserDataDTO, так как у entity AppUser есть поле id и вообще это не совсем хороший подход
+        return userService.signup(modelMapper.map(user, AppUser.class)); //конвертируем UserDataDTO в AppUser
     }
 
-    @GetMapping("/id")
-    public ResponseEntity<User> findById(long id) {
-        Optional<User> byId = userRepository.findById(id);
-        if (id == 555) {
-            throw new RuntimeException("Bad ID"); //будет выводить вместо стэк трэйса с ненужной иноформацией "Bad ID", благодаря нашему классу ExController
-        }
-        if (byId.isPresent()) {
-            return ResponseEntity.ok(byId.get());
-        }
-        return ResponseEntity.badRequest().build();
+    @DeleteMapping(value = "/{username}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')") //если есть роли и на этот метод приходит запрос
+    // и в SecurityContext сидит пользователь, у которого роль не ROLE_ADMIN, а другая, то ему доступ
+    // будет запрещен
+    public String delete(@PathVariable String username) {
+        userService.delete(username);
+        return username;
     }
 
-    @PutMapping
-    public ResponseEntity<User> update(@RequestBody @Valid User user) {
-        User save = userRepository.save(user);//Save() работает по такому же принципу, как и save() в Hibernate. То есть save() работает как save() и как  update()
-        return ResponseEntity.ok(save); //save() понимает, что нужно обновить, а не сохранить если внутри user-а, который нам пришел есть id и этот id совпадает с id user-а в БД, то происходит обновление. Если id в БД - нет, либо он=0 - происходит сохранение
+    @GetMapping(value = "/{username}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public UserResponseDTO search(@PathVariable String username) {
+        return modelMapper.map(userService.search(username), UserResponseDTO.class);
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> delete(@RequestBody @Valid User user) { //Возвращать мы будем только код. Никаких данных в body у нас не будет. Мы не знаем что там будет <?>
-        userRepository.delete(user);
-        return ResponseEntity.ok().build();
+    @GetMapping(value = "/me")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT')")
+    public UserResponseDTO whoami(HttpServletRequest req) { //возвращаем UserResponseDTO, так как там нет пароля, а у обычного AppUser есть пароль
+        return modelMapper.map(userService.whoami(req), UserResponseDTO.class); //конвертируем AppUser в UserResponseDTO
     }
 
-
-    @DeleteMapping("/id")
-    public ResponseEntity<?> deleteById(long id) {
-        userRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+    @GetMapping("/refresh")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT')")
+    public String refresh(HttpServletRequest req) {
+        return userService.refresh(req.getRemoteUser());
     }
 }
